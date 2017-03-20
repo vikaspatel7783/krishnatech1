@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -20,15 +21,21 @@ import com.krishnatech.mobile.http.VollyHttpCommunicator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.ConnectException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends Activity implements View.OnClickListener, VollyHttpCommunicator.VollyResultCallback {
 
     String url = UiUtil.BASE_URL + "/login";
 
+    private static final int loginRequestId = 1;
+    private static final int listDeviceServiceId = 2;
+
     private EditText editTextUsername;
     private EditText editTextPassword;
     private ProgressBar progressBar;
+    private TextView txtViewPgBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +45,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
         editTextUsername = (EditText) findViewById(R.id.edttxtUsername);
         editTextPassword = (EditText) findViewById(R.id.edtTextPassword);
         progressBar = (ProgressBar) findViewById(R.id.pgBarLogin);
+        txtViewPgBar = (TextView) findViewById(R.id.txtviewProgressbar);
+
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
 
-        showProgressBar(false);
+        showProgressBar(false, null);
     }
 
     @Override
@@ -55,7 +64,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
             return;
         }
 
-        VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(this, Request.Method.POST, url, loginJsonParams, null, this);
+        VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(this,
+                loginRequestId, Request.Method.POST, url, loginJsonParams, null, this);
         vollyHttpCommunicator.execute();
 
         /*HashMap<String, String> headerParam = new HashMap<>();
@@ -70,7 +80,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
         vollyHttpCommunicator.execute();*/
 
 
-        showProgressBar(true);
+        showProgressBar(true, "Logging in progress...");
 
         //new AsyncCommunicator(url).execute(loginJsonParams.toString());
     }
@@ -94,39 +104,84 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
         return loginJsonParams;
     }
 
-    private void showProgressBar(boolean show) {
-        progressBar.setVisibility(show? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-        showProgressBar(false);
-        clearLoginUIFields();
-        try {
-            if (response.has("status") && response.get("status").equals("success")) {
-                String token = (String) response.getJSONObject("data").get("token");
-                ServiceContext.getInstance().setToken(token);
-                UiUtil.getAlertDailog(this, "Login", "Token received: "+token).show();
-            } else {
-                UiUtil.getAlertDailog(this, "Login", "Response may not contain status value or not success").show();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            UiUtil.getAlertDailog(this, "Login", "JsonParsing exception in response").show();
+    private void showProgressBar(boolean show, String progressbarText) {
+        if (show) {
+            txtViewPgBar.setVisibility(View.VISIBLE);
+            txtViewPgBar.setText(progressbarText);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            txtViewPgBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
         }
     }
 
     @Override
-    public void onErrorResponse(VolleyError error) {
+    public void onResponse(int requestId, JSONObject response) {
+        showProgressBar(false, null);
         clearLoginUIFields();
-        showProgressBar(false);
-        UiUtil.getAlertDailog(this, "Login", "Wrong username or password entered").show();
+
+        switch (requestId) {
+            case loginRequestId:
+                try {
+                    if (response.has("status") && response.get("status").equals("success")) {
+                        String token = (String) response.getJSONObject("data").get("token");
+                        ServiceContext.getInstance().setToken(token);
+
+                        callListServicePostLogin();
+                    } else {
+                        UiUtil.getAlertDailog(this, "Login", "Response may not contain status field or not success").show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    UiUtil.getAlertDailog(this, "Login", "JsonParsing exception in response").show();
+                }
+                break;
+
+            case listDeviceServiceId:
+                break;
+        }
+
+    }
+
+    @Override
+    public void onErrorResponse(int requestId, VolleyError error) {
+        clearLoginUIFields();
+        showProgressBar(false, null);
+
+        if (error.getCause() instanceof ConnectException) {
+            UiUtil.getAlertDailog(this, "Login", "Unable to reach to server. Please try again or check Internet connetivity").show();
+            return;
+        }
+        switch (requestId) {
+            case loginRequestId:
+                UiUtil.getAlertDailog(this, "Login", "Wrong username or password entered").show();
+                break;
+
+            case listDeviceServiceId:
+                break;
+        }
     }
 
     private void clearLoginUIFields() {
         editTextPassword.setText("");
         editTextUsername.setText("");
         editTextUsername.requestFocus();
+    }
+
+    private void callListServicePostLogin() {
+        showProgressBar(true, "Getting device list...");
+
+        HashMap<String, String> header = new HashMap<>();
+        header.put("Authorization", ServiceContext.getInstance().getToken());
+
+        VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(this,
+                listDeviceServiceId,
+                Request.Method.GET,
+                UiUtil.BASE_URL +"/device/list",
+                null,
+                header,
+                this);
+        vollyHttpCommunicator.execute();
     }
 
     class AsyncCommunicator extends AsyncTask<String, Void, URLBasedRestCommunicator.Response> {

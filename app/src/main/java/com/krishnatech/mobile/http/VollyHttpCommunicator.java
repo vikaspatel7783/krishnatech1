@@ -1,7 +1,6 @@
 package com.krishnatech.mobile.http;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -12,7 +11,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.krishnatech.mobile.ui.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,17 +23,22 @@ public class VollyHttpCommunicator extends JsonObjectRequest {
 
     private final Map<String, String> requestHeader;
     private final Context context;
+    private final int requestId;
     private VollyResultCallback vollyResultCallback;
 
     public VollyHttpCommunicator(Context context,
+                                 int requestId,
                                  int method,
                                  String url,
                                  JSONObject bodyParams,
                                  Map<String, String> requestHeader,
                                  VollyResultCallback vollyResultCallback) {
 
-        super(method, url, bodyParams, new ResponseListener(vollyResultCallback), new ErrorListener(vollyResultCallback));
+        super(method, url, bodyParams,
+                new ResponseListener(requestId, vollyResultCallback),
+                new ErrorListener(requestId, vollyResultCallback));
         this.context = context;
+        this.requestId = requestId;
         this.vollyResultCallback = vollyResultCallback;
         this.requestHeader = requestHeader;
     }
@@ -61,7 +64,7 @@ public class VollyHttpCommunicator extends JsonObjectRequest {
 
     @Override
     protected void deliverResponse(JSONObject response) {
-        this.vollyResultCallback.onResponse(response);
+        this.vollyResultCallback.onResponse(requestId, response);
     }
 
     @Override
@@ -86,43 +89,45 @@ public class VollyHttpCommunicator extends JsonObjectRequest {
 
 
         private final VollyResultCallback vollyResultCallback;
+        private final int requestId;
 
-        public ResponseListener(VollyResultCallback vollyResultCallback) {
+        public ResponseListener(int requestId, VollyResultCallback vollyResultCallback) {
             this.vollyResultCallback = vollyResultCallback;
+            this.requestId = requestId;
         }
 
         @Override
         public void onResponse(JSONObject response) {
-            vollyResultCallback.onResponse(response);
+            vollyResultCallback.onResponse(requestId, response);
         }
     }
 
     public static class ErrorListener implements Response.ErrorListener {
 
         private final VollyResultCallback vollyResultCallback;
+        private final int requestId;
 
-        public ErrorListener(VollyResultCallback vollyResultCallback) {
+        public ErrorListener(int requestId, VollyResultCallback vollyResultCallback) {
             this.vollyResultCallback = vollyResultCallback;
+            this.requestId = requestId;
         }
 
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.d(LoginActivity.class.getSimpleName(), "Error: " + error
+           /* Log.d(LoginActivity.class.getSimpleName(), "Error: " + error
                     + "\nStatus Code " + error.networkResponse.statusCode
                     + "\nResponse Data " + error.networkResponse.data
                     + "\nCause " + error.getCause()
-                    + "\nmessage" + error.getMessage());
+                    + "\nmessage" + error.getMessage());*/
             error.printStackTrace();
-            vollyResultCallback.onErrorResponse(error);
+            vollyResultCallback.onErrorResponse(requestId, error);
         }
     }
 
-    public interface VollyResultCallback extends Response.Listener<JSONObject>, Response.ErrorListener {
+    public interface VollyResultCallback {
 
-        @Override
-        void onResponse(JSONObject response);
+        void onResponse(int requestId, JSONObject response);
 
-        @Override
-        void onErrorResponse(VolleyError error);
+        void onErrorResponse(int requestId, VolleyError error);
     }
 }
