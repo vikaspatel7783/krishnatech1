@@ -1,6 +1,7 @@
 package com.krishnatech.mobile.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.ConnectException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends Activity implements View.OnClickListener, VollyHttpCommunicator.VollyResultCallback {
@@ -30,7 +30,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
     String url = UiUtil.BASE_URL + "/login";
 
     private static final int loginRequestId = 1;
-    private static final int listDeviceServiceId = 2;
 
     private EditText editTextUsername;
     private EditText editTextPassword;
@@ -127,7 +126,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
                         String token = (String) response.getJSONObject("data").get("token");
                         ServiceContext.getInstance().setToken(token);
 
-                        callListServicePostLogin();
+                        showRegisteredDevicesScreen();
                     } else {
                         UiUtil.getAlertDailog(this, "Login", "Response may not contain status field or not success").show();
                     }
@@ -135,9 +134,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
                     e.printStackTrace();
                     UiUtil.getAlertDailog(this, "Login", "JsonParsing exception in response").show();
                 }
-                break;
-
-            case listDeviceServiceId:
                 break;
         }
 
@@ -149,15 +145,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
         showProgressBar(false, null);
 
         if (error.getCause() instanceof ConnectException) {
-            UiUtil.getAlertDailog(this, "Login", "Unable to reach to server. Please try again or check Internet connetivity").show();
+            UiUtil.getAlertDailog(this, "Login", "Unable to reach to server. Please try again or check Internet connectivity").show();
             return;
         }
         switch (requestId) {
             case loginRequestId:
                 UiUtil.getAlertDailog(this, "Login", "Wrong username or password entered").show();
-                break;
-
-            case listDeviceServiceId:
                 break;
         }
     }
@@ -168,20 +161,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
         editTextUsername.requestFocus();
     }
 
-    private void callListServicePostLogin() {
-        showProgressBar(true, "Getting device list...");
-
-        HashMap<String, String> header = new HashMap<>();
-        header.put("Authorization", ServiceContext.getInstance().getToken());
-
-        VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(this,
-                listDeviceServiceId,
-                Request.Method.GET,
-                UiUtil.BASE_URL +"/device/list",
-                null,
-                header,
-                this);
-        vollyHttpCommunicator.execute();
+    private void showRegisteredDevicesScreen() {
+        startActivity(new Intent(this, DeviceListActivity.class));
+        finish();
     }
 
     class AsyncCommunicator extends AsyncTask<String, Void, URLBasedRestCommunicator.Response> {

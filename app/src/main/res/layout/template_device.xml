@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="15dp"
+    android:background="@android:color/holo_blue_dark">
+
+    <ImageView
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="14dp"
+        android:id="@+id/imageView" />
+
+    <TextView
+        android:text="Device ID:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_toEndOf="@+id/imageView"
+        android:layout_marginLeft="34dp"
+        android:layout_marginStart="34dp"
+        android:id="@+id/txtViewLabelDeviceId" />
+
+    <TextView
+        android:text="Device Id value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_alignTop="@+id/txtViewLabelDeviceId"
+        android:layout_toRightOf="@+id/txtViewLabelDeviceId"
+        android:layout_toEndOf="@+id/txtViewLabelDeviceId"
+        android:layout_marginLeft="49dp"
+        android:layout_marginStart="49dp"
+        android:id="@+id/txtViewValueDeviceId" />
+
+    <TextView
+        android:text="Device Type:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtViewLabelDeviceType"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignLeft="@+id/txtViewLabelDeviceId"
+        android:layout_alignStart="@+id/txtViewLabelDeviceId" />
+
+    <TextView
+        android:text="Device type value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_alignTop="@+id/txtViewLabelDeviceType"
+        android:layout_alignLeft="@+id/txtViewValueDeviceId"
+        android:layout_alignStart="@+id/txtViewValueDeviceId"
+        android:id="@+id/txtViewValueDeviceType" />
+
+    <TextView
+        android:text="Device Name:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtViewLabelDeviceName"
+        android:layout_below="@+id/txtViewLabelDeviceType"
+        android:layout_alignLeft="@+id/txtViewLabelDeviceType"
+        android:layout_alignStart="@+id/txtViewLabelDeviceType"
+        android:layout_marginTop="14dp" />
+
+    <TextView
+        android:text="Device name value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:id="@+id/txtViewValueDeviceName"
+        android:layout_alignBaseline="@+id/txtViewLabelDeviceName"
+        android:layout_alignBottom="@+id/txtViewLabelDeviceName"
+        android:layout_alignLeft="@+id/txtViewValueDeviceType"
+        android:layout_alignStart="@+id/txtViewValueDeviceType" />
+
+</RelativeLayout>
