@@ -2,4 +2,18 @@
     <string name="app_name">KrishnaTech</string>
     <string name="screen_title_login">Login</string>
     <string name="screen_title_devicelist">Registered devices</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+
+    <string name="title_section1">Graph</string>
+    <string name="title_section2">Alert</string>
+    <string name="title_section3">Offline data</string>
+    <string name="title_section4">Set password</string>
+    <string name="title_section5">Set mobile</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

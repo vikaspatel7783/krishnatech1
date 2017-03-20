@@ -1,13 +1,13 @@
 package com.krishnatech.mobile.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -93,12 +93,9 @@ public class DeviceListActivity extends Activity implements VollyHttpCommunicato
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                JSONObject deviceJson = (JSONObject) deviceListAdapter.getItem(position);
-                try {
-                    Toast.makeText(DeviceListActivity.this, "selected device: "+deviceJson.get("deviceid"), Toast.LENGTH_SHORT).show();deviceJson.get("deviceid");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                finish();
+                //JSONObject deviceJson = (JSONObject) deviceListAdapter.getItem(position);
             }
         });
     }
