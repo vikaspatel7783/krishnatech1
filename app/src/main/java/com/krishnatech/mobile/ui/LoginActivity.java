@@ -68,7 +68,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
         vollyHttpCommunicator.execute();
 
         /*HashMap<String, String> headerParam = new HashMap<>();
-        headerParam.put("Authorization", "a2V0YW46a2V0YW4xMjM=");
+        headerParam.put(ServiceContext.KEY_AUTHORIZATION, "a2V0YW46a2V0YW4xMjM=");
         VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(
                 this,
                 Request.Method.GET,
@@ -122,8 +122,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
         switch (requestId) {
             case loginRequestId:
                 try {
-                    if (response.has("status") && response.get("status").equals("success")) {
-                        String token = (String) response.getJSONObject("data").get("token");
+                    if (response.has(ServiceContext.KEY_STATUS) && response.get(ServiceContext.KEY_STATUS).equals(ServiceContext.KEY_SUCCESS)) {
+                        String token = (String) response.getJSONObject(ServiceContext.KEY_DATA).get("token");
                         ServiceContext.getInstance().setToken(token);
 
                         showRegisteredDevicesScreen();
@@ -190,7 +190,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
                 Map<String, String> header = response.getHeader();
 
                 try {
-                    Toast.makeText(LoginActivity.this, "Status: "+jsonObject.get("status"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Status: "+jsonObject.get(ServiceContext.KEY_STATUS), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

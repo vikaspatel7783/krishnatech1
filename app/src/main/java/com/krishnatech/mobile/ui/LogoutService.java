@@ -2,19 +2,74 @@ package com.krishnatech.mobile.ui;
 
 import android.content.Context;
 
-import com.android.volley.Request;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.krishnatech.mobile.ServiceContext;
 import com.krishnatech.mobile.http.VollyHttpCommunicator;
 
-import java.util.HashMap;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-public class LogoutService {
+public class LogoutService extends VollyHttpCommunicator {
 
-    public void logout(Context context, VollyHttpCommunicator.VollyResultCallback vollyResultCallback) {
-        Map<String, String> header = new HashMap<>();
-        header.put("Authorization", "35535335353");
-        VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(context, 2, Request.Method.GET, "http://182.237.12.85:8080/krishnarest/rest/logout", null, header, vollyResultCallback);
-        vollyHttpCommunicator.execute();
+    public static final int requestId = 1;
+
+    public LogoutService(Context context, int requestId, int method, String url, JSONObject bodyParams, Map<String, String> requestHeader, VollyResultCallback vollyResultCallback, LogoutCallback logoutCallback) {
+        super(context, requestId, method, url, bodyParams, requestHeader, new CustomVollyCallback(logoutCallback));
     }
 
-}
+    public void logout() {
+        execute();
+    }
+
+    @Override
+    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+        try {
+            // TODO: Unfortunately, response received in plain text only as it is expected in JSON format.
+            String plainString = new String(response.data,
+                    HttpHeaderParser.parseCharset(response.headers));
+
+            // Manually wrapping to json string
+            try {
+                String jsonString = "{ \"status\": \""+plainString+"\" }";
+                return Response.success(new JSONObject(jsonString),
+                        HttpHeaderParser.parseCacheHeaders(response));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static class CustomVollyCallback implements VollyResultCallback {
+
+        private final LogoutCallback logoutCallback;
+
+        public CustomVollyCallback(LogoutCallback logoutCallback) {
+            this.logoutCallback = logoutCallback;
+        }
+
+        @Override
+        public void onResponse(int requestId, JSONObject response) {
+            ServiceContext.getInstance().clear();
+            logoutCallback.onLoggedOut();
+        }
+
+        @Override
+        public void onErrorResponse(int requestId, VolleyError error) {
+            ServiceContext.getInstance().clear();
+            logoutCallback.onLoggedOut();
+        }
+    }
+
+    public interface LogoutCallback {
+        void onLoggedOut();
+    }
+ }

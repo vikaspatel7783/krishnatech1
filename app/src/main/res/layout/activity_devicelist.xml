@@ -2,28 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <ProgressBar
-        style="@android:style/Widget.DeviceDefault.ProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:id="@+id/pgBarLogin"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:text="Progress bar text..."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pgBarLogin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:id="@+id/txtviewProgressbar" />
-
     <ListView
         android:id="@+id/lstViewDeviceList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtviewProgressbar">
+        android:layout_height="wrap_content">
 
     </ListView>
 

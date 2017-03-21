@@ -3,17 +3,24 @@ package com.krishnatech.mobile.ui;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
 import com.krishnatech.mobile.R;
+import com.krishnatech.mobile.ServiceContext;
 
-public class DashboardActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.krishnatech.mobile.ui.LogoutService.requestId;
+
+public class DashboardActivity extends ParentActivity
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, LogoutService.LogoutCallback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -43,10 +50,37 @@ public class DashboardActivity extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
+
+        switch (position) {
+            case 0:
+                break;
+
+            case 1: // Alerts
+                startActivity(new Intent(this, AlertsActivity.class));
+                break;
+
+            case 5: // Logout
+                showProgressbar("Logging out...");
+
+                Map<String, String> header = new HashMap<>();
+                header.put(ServiceContext.KEY_AUTHORIZATION, ServiceContext.getInstance().getToken());
+
+                new LogoutService(getApplicationContext(),
+                        requestId,
+                        Request.Method.GET,
+                        UiUtil.BASE_URL +"/logout",
+                        null,
+                        header,
+                        null,
+                        this).logout();
+                break;
+        }
+
+
+        /*FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+                .commit();*/
     }
 
     public void onSectionAttached(int number) {
@@ -60,6 +94,15 @@ public class DashboardActivity extends Activity
             case 3:
                 mTitle = getString(R.string.title_section3);
                 break;
+            case 4:
+                mTitle = getString(R.string.title_section4);
+                break;
+            case 5:
+                mTitle = getString(R.string.title_section5);
+                break;
+            case 6:
+                mTitle = getString(R.string.title_section6);
+                break;
         }
     }
 
@@ -68,6 +111,33 @@ public class DashboardActivity extends Activity
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+    }
+
+    /*protected void showProgressbar(String message) {
+        showDialog(new ProgressBarDialogFragment().withMessage(message), TAG_PROGRESS_DIALOG);
+    }
+
+    protected void dismissProgressbar() {
+        ProgressBarDialogFragment progressBarDialogFragment = (ProgressBarDialogFragment) getFragmentManager().findFragmentByTag(TAG_PROGRESS_DIALOG);
+        if (progressBarDialogFragment != null) {
+            progressBarDialogFragment.dismiss();
+        }
+    }
+
+    public boolean showDialog(DialogFragment dialogFragment, String tag) {
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragmentByTag = fragmentManager.findFragmentByTag(tag);
+        if (fragmentByTag == null) {
+            dialogFragment.show(fragmentManager, tag);
+            return true;
+        }
+        return false;
+    }*/
+
+    @Override
+    public void onLoggedOut() {
+        dismissProgressbar();
+        finish();
     }
 
     /**

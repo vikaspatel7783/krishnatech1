@@ -1,13 +1,10 @@
 package com.krishnatech.mobile.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -21,7 +18,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class DeviceListActivity extends Activity implements VollyHttpCommunicator.VollyResultCallback {
+import static com.krishnatech.mobile.ui.DeviceListAdapter.KEY_DEVICE_ID;
+
+public class DeviceListActivity extends ParentActivity implements VollyHttpCommunicator.VollyResultCallback {
 
     private final int listDeviceServiceId = 1;
     private ListView deviceListView;
@@ -36,10 +35,10 @@ public class DeviceListActivity extends Activity implements VollyHttpCommunicato
     }
 
     private void fetchRegisteredDevices() {
-        showProgressBar(true, "Getting device list...");
+        showProgressbar("Getting device list...");
 
         HashMap<String, String> header = new HashMap<>();
-        header.put("Authorization", ServiceContext.getInstance().getToken());
+        header.put(ServiceContext.KEY_AUTHORIZATION, ServiceContext.getInstance().getToken());
 
         VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(this,
                 listDeviceServiceId,
@@ -51,38 +50,20 @@ public class DeviceListActivity extends Activity implements VollyHttpCommunicato
         vollyHttpCommunicator.execute();
     }
 
-    private void showProgressBar(boolean show, String label) {
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.pgBarLogin);
-        TextView txtViewPgBar = (TextView) findViewById(R.id.txtviewProgressbar);
-        if (show) {
-            txtViewPgBar.setVisibility(View.VISIBLE);
-            txtViewPgBar.setText(label);
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            txtViewPgBar.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
-        }
-    }
-
     @Override
     public void onResponse(int requestId, JSONObject response) {
-        showProgressBar(false, null);
+        dismissProgressbar();
 
-        switch (requestId) {
-            case listDeviceServiceId:
-                try {
-                    if (response.has("status") && response.get("status").equals("success")) {
-                        showRegisteredDevicesScreen(response.getJSONArray("data"));
-                    } else {
-                        UiUtil.getAlertDailog(this, "Login", "Response may not contain status field or not success").show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    UiUtil.getAlertDailog(this, "Login", "JsonParsing exception in response").show();
-                }
-                break;
+        try {
+            if (response.has(ServiceContext.KEY_STATUS) && response.get(ServiceContext.KEY_STATUS).equals(ServiceContext.KEY_SUCCESS)) {
+                showRegisteredDevicesScreen(response.getJSONArray(ServiceContext.KEY_DATA));
+            } else {
+                UiUtil.getAlertDailog(this, "Login", "Response may not contain status field or not success").show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            UiUtil.getAlertDailog(this, "Login", "JsonParsing exception in response").show();
         }
-
     }
 
     private void showRegisteredDevicesScreen(JSONArray jsonArray) {
@@ -93,16 +74,23 @@ public class DeviceListActivity extends Activity implements VollyHttpCommunicato
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-                finish();
-                //JSONObject deviceJson = (JSONObject) deviceListAdapter.getItem(position);
+                JSONObject deviceJsonObject = (JSONObject) deviceListAdapter.getItem(position);
+                try {
+                    String deviceId = deviceJsonObject.getString(KEY_DEVICE_ID);
+                    ServiceContext.getInstance().setDeviceId(deviceId);
+                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                    finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    UiUtil.getAlertDailog(getApplicationContext(), "DeviceId", "Problem while extracting deviceId from json");
+                }
             }
         });
     }
 
     @Override
     public void onErrorResponse(int requestId, VolleyError error) {
-        showProgressBar(false, null);
+        dismissProgressbar();
         UiUtil.getAlertDailog(this, "Device List", "Exception in fetching registered devices").show();
     }
 }

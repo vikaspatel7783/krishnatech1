@@ -15,6 +15,10 @@ import org.json.JSONObject;
 
 public class DeviceListAdapter extends BaseAdapter {
 
+    public static final String KEY_DEVICE_ID = "deviceid";
+    public static final String KEY_DEVICE_TYPE = "devicetype";
+    public static final String KEY_DEVICE_NAME = "name";
+
     private Context context;
     LayoutInflater inflater;
     private JSONArray items;
@@ -38,9 +42,9 @@ public class DeviceListAdapter extends BaseAdapter {
         TextView txtViewDeviceType = (TextView) convertView.findViewById(R.id.txtViewValueDeviceType);
 
         try {
-            txtViewDeviceId.setText(deviceJsonObject.getString("deviceid"));
-            txtViewDeviceType.setText(deviceJsonObject.getString("devicetype"));
-            txtViewDeviceName.setText(deviceJsonObject.getString("name"));
+            txtViewDeviceId.setText(deviceJsonObject.getString(KEY_DEVICE_ID));
+            txtViewDeviceType.setText(deviceJsonObject.getString(KEY_DEVICE_TYPE));
+            txtViewDeviceName.setText(deviceJsonObject.getString(KEY_DEVICE_NAME));
         } catch (JSONException e) {
             e.printStackTrace();
         }
