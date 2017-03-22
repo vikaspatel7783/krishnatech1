@@ -19,27 +19,27 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VollyHttpCommunicator extends JsonObjectRequest {
+public class VolleyHttpCommunicator extends JsonObjectRequest {
 
     private final Map<String, String> requestHeader;
     private final Context context;
     private final int requestId;
-    private VollyResultCallback vollyResultCallback;
+    private VolleyResultCallback volleyResultCallback;
 
-    public VollyHttpCommunicator(Context context,
-                                 int requestId,
-                                 int method,
-                                 String url,
-                                 JSONObject bodyParams,
-                                 Map<String, String> requestHeader,
-                                 VollyResultCallback vollyResultCallback) {
+    public VolleyHttpCommunicator(Context context,
+                                  int requestId,
+                                  int method,
+                                  String url,
+                                  JSONObject bodyParams,
+                                  Map<String, String> requestHeader,
+                                  VolleyResultCallback volleyResultCallback) {
 
         super(method, url, bodyParams,
-                new ResponseListener(requestId, vollyResultCallback),
-                new ErrorListener(requestId, vollyResultCallback));
+                new ResponseListener(requestId, volleyResultCallback),
+                new ErrorListener(requestId, volleyResultCallback));
         this.context = context;
         this.requestId = requestId;
-        this.vollyResultCallback = vollyResultCallback;
+        this.volleyResultCallback = volleyResultCallback;
         this.requestHeader = requestHeader;
     }
 
@@ -64,7 +64,7 @@ public class VollyHttpCommunicator extends JsonObjectRequest {
 
     @Override
     protected void deliverResponse(JSONObject response) {
-        this.vollyResultCallback.onResponse(requestId, response);
+        this.volleyResultCallback.onResponse(requestId, response);
     }
 
     @Override
@@ -88,27 +88,27 @@ public class VollyHttpCommunicator extends JsonObjectRequest {
     public static class ResponseListener implements Response.Listener<JSONObject> {
 
 
-        private final VollyResultCallback vollyResultCallback;
+        private final VolleyResultCallback volleyResultCallback;
         private final int requestId;
 
-        public ResponseListener(int requestId, VollyResultCallback vollyResultCallback) {
-            this.vollyResultCallback = vollyResultCallback;
+        public ResponseListener(int requestId, VolleyResultCallback volleyResultCallback) {
+            this.volleyResultCallback = volleyResultCallback;
             this.requestId = requestId;
         }
 
         @Override
         public void onResponse(JSONObject response) {
-            vollyResultCallback.onResponse(requestId, response);
+            volleyResultCallback.onResponse(requestId, response);
         }
     }
 
     public static class ErrorListener implements Response.ErrorListener {
 
-        private final VollyResultCallback vollyResultCallback;
+        private final VolleyResultCallback volleyResultCallback;
         private final int requestId;
 
-        public ErrorListener(int requestId, VollyResultCallback vollyResultCallback) {
-            this.vollyResultCallback = vollyResultCallback;
+        public ErrorListener(int requestId, VolleyResultCallback volleyResultCallback) {
+            this.volleyResultCallback = volleyResultCallback;
             this.requestId = requestId;
         }
 
@@ -120,11 +120,11 @@ public class VollyHttpCommunicator extends JsonObjectRequest {
                     + "\nCause " + error.getCause()
                     + "\nmessage" + error.getMessage());*/
             error.printStackTrace();
-            vollyResultCallback.onErrorResponse(requestId, error);
+            volleyResultCallback.onErrorResponse(requestId, error);
         }
     }
 
-    public interface VollyResultCallback {
+    public interface VolleyResultCallback {
 
         void onResponse(int requestId, JSONObject response);
 

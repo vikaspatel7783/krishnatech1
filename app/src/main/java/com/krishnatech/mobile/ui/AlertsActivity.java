@@ -8,14 +8,14 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.krishnatech.mobile.R;
 import com.krishnatech.mobile.ServiceContext;
-import com.krishnatech.mobile.http.VollyHttpCommunicator;
+import com.krishnatech.mobile.http.VolleyHttpCommunicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class AlertsActivity extends ParentActivity implements VollyHttpCommunicator.VollyResultCallback {
+public class AlertsActivity extends ParentActivity implements VolleyHttpCommunicator.VolleyResultCallback {
 
     private static final String PARAM_DEVICE_ID = "device_id";
     private static final String PARAM_DATE = "date";
@@ -41,7 +41,7 @@ public class AlertsActivity extends ParentActivity implements VollyHttpCommunica
             e.printStackTrace();
         }
 
-        new VollyHttpCommunicator(this,
+        new VolleyHttpCommunicator(this,
                 1,
                 Request.Method.GET,
                 UiUtil.BASE_URL + "/device/alerts",

@@ -2,8 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <TextView
+        android:text="Please select device from below list."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_blue_dark"
+        android:id="@+id/textView" />
+
     <ListView
         android:id="@+id/lstViewDeviceList"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

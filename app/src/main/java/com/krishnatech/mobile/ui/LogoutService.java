@@ -7,7 +7,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.krishnatech.mobile.ServiceContext;
-import com.krishnatech.mobile.http.VollyHttpCommunicator;
+import com.krishnatech.mobile.http.VolleyHttpCommunicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,11 +15,11 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-public class LogoutService extends VollyHttpCommunicator {
+public class LogoutService extends VolleyHttpCommunicator {
 
     public static final int requestId = 1;
 
-    public LogoutService(Context context, int requestId, int method, String url, JSONObject bodyParams, Map<String, String> requestHeader, VollyResultCallback vollyResultCallback, LogoutCallback logoutCallback) {
+    public LogoutService(Context context, int requestId, int method, String url, JSONObject bodyParams, Map<String, String> requestHeader, VolleyResultCallback volleyResultCallback, LogoutCallback logoutCallback) {
         super(context, requestId, method, url, bodyParams, requestHeader, new CustomVollyCallback(logoutCallback));
     }
 
@@ -48,7 +48,7 @@ public class LogoutService extends VollyHttpCommunicator {
         return null;
     }
 
-    private static class CustomVollyCallback implements VollyResultCallback {
+    private static class CustomVollyCallback implements VolleyResultCallback {
 
         private final LogoutCallback logoutCallback;
 

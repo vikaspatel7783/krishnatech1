@@ -10,7 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.krishnatech.mobile.R;
 import com.krishnatech.mobile.ServiceContext;
-import com.krishnatech.mobile.http.VollyHttpCommunicator;
+import com.krishnatech.mobile.http.VolleyHttpCommunicator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 
 import static com.krishnatech.mobile.ui.DeviceListAdapter.KEY_DEVICE_ID;
 
-public class DeviceListActivity extends ParentActivity implements VollyHttpCommunicator.VollyResultCallback {
+public class DeviceListActivity extends ParentActivity implements VolleyHttpCommunicator.VolleyResultCallback {
 
     private final int listDeviceServiceId = 1;
     private ListView deviceListView;
@@ -40,14 +40,14 @@ public class DeviceListActivity extends ParentActivity implements VollyHttpCommu
         HashMap<String, String> header = new HashMap<>();
         header.put(ServiceContext.KEY_AUTHORIZATION, ServiceContext.getInstance().getToken());
 
-        VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(this,
+        VolleyHttpCommunicator volleyHttpCommunicator = new VolleyHttpCommunicator(this,
                 listDeviceServiceId,
                 Request.Method.GET,
                 UiUtil.BASE_URL +"/device/list",
                 null,
                 header,
                 this);
-        vollyHttpCommunicator.execute();
+        volleyHttpCommunicator.execute();
     }
 
     @Override

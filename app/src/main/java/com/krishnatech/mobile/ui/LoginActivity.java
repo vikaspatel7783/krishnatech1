@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.krishnatech.mobile.R;
 import com.krishnatech.mobile.ServiceContext;
 import com.krishnatech.mobile.http.URLBasedRestCommunicator;
-import com.krishnatech.mobile.http.VollyHttpCommunicator;
+import com.krishnatech.mobile.http.VolleyHttpCommunicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import java.net.ConnectException;
 import java.util.Map;
 
-public class LoginActivity extends Activity implements View.OnClickListener, VollyHttpCommunicator.VollyResultCallback {
+public class LoginActivity extends Activity implements View.OnClickListener, VolleyHttpCommunicator.VolleyResultCallback {
 
     String url = UiUtil.BASE_URL + "/login";
 
@@ -63,20 +63,20 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
             return;
         }
 
-        VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(this,
+        VolleyHttpCommunicator volleyHttpCommunicator = new VolleyHttpCommunicator(this,
                 loginRequestId, Request.Method.POST, url, loginJsonParams, null, this);
-        vollyHttpCommunicator.execute();
+        volleyHttpCommunicator.execute();
 
         /*HashMap<String, String> headerParam = new HashMap<>();
         headerParam.put(ServiceContext.KEY_AUTHORIZATION, "a2V0YW46a2V0YW4xMjM=");
-        VollyHttpCommunicator vollyHttpCommunicator = new VollyHttpCommunicator(
+        VolleyHttpCommunicator volleyHttpCommunicator = new VolleyHttpCommunicator(
                 this,
                 Request.Method.GET,
                 UiUtil.BASE_URL + "/device/list",
                 null,
                 headerParam,
                 this);
-        vollyHttpCommunicator.execute();*/
+        volleyHttpCommunicator.execute();*/
 
 
         showProgressBar(true, "Logging in progress...");

@@ -52,14 +52,15 @@ public class DashboardActivity extends ParentActivity
         // update the main content by replacing fragments
 
         switch (position) {
-            case 0:
+
+            case 0: // default when lending.
                 break;
 
             case 1: // Alerts
                 startActivity(new Intent(this, AlertsActivity.class));
                 break;
 
-            case 5: // Logout
+            case 2: // Logout
                 showProgressbar("Logging out...");
 
                 Map<String, String> header = new HashMap<>();
@@ -84,26 +85,7 @@ public class DashboardActivity extends ParentActivity
     }
 
     public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_section4);
-                break;
-            case 5:
-                mTitle = getString(R.string.title_section5);
-                break;
-            case 6:
-                mTitle = getString(R.string.title_section6);
-                break;
-        }
+
     }
 
     public void restoreActionBar() {
@@ -112,27 +94,6 @@ public class DashboardActivity extends ParentActivity
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
-
-    /*protected void showProgressbar(String message) {
-        showDialog(new ProgressBarDialogFragment().withMessage(message), TAG_PROGRESS_DIALOG);
-    }
-
-    protected void dismissProgressbar() {
-        ProgressBarDialogFragment progressBarDialogFragment = (ProgressBarDialogFragment) getFragmentManager().findFragmentByTag(TAG_PROGRESS_DIALOG);
-        if (progressBarDialogFragment != null) {
-            progressBarDialogFragment.dismiss();
-        }
-    }
-
-    public boolean showDialog(DialogFragment dialogFragment, String tag) {
-        FragmentManager fragmentManager = getFragmentManager();
-        Fragment fragmentByTag = fragmentManager.findFragmentByTag(tag);
-        if (fragmentByTag == null) {
-            dialogFragment.show(fragmentManager, tag);
-            return true;
-        }
-        return false;
-    }*/
 
     @Override
     public void onLoggedOut() {
