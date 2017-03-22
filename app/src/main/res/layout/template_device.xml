@@ -14,6 +14,7 @@
         android:layout_toRightOf="@+id/imageView"
         android:layout_toEndOf="@+id/imageView"
         android:layout_marginLeft="34dp"
+        android:textColor="#FFFFFF"
         android:layout_marginStart="34dp"
         android:id="@+id/txtViewLabelDeviceId" />
 
@@ -22,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
+        android:textColor="#FFFFFF"
         android:layout_alignTop="@+id/txtViewLabelDeviceId"
         android:layout_toRightOf="@+id/txtViewLabelDeviceId"
         android:layout_toEndOf="@+id/txtViewLabelDeviceId"
@@ -34,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtViewLabelDeviceType"
+        android:textColor="#FFFFFF"
         android:layout_alignBottom="@+id/imageView"
         android:layout_alignLeft="@+id/txtViewLabelDeviceId"
         android:layout_alignStart="@+id/txtViewLabelDeviceId" />
@@ -43,6 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
+        android:textColor="#FFFFFF"
         android:layout_alignTop="@+id/txtViewLabelDeviceType"
         android:layout_alignLeft="@+id/txtViewValueDeviceId"
         android:layout_alignStart="@+id/txtViewValueDeviceId"
@@ -53,6 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtViewLabelDeviceName"
+        android:textColor="#FFFFFF"
         android:layout_below="@+id/txtViewLabelDeviceType"
         android:layout_alignLeft="@+id/txtViewLabelDeviceType"
         android:layout_alignStart="@+id/txtViewLabelDeviceType"
@@ -63,6 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
+        android:textColor="#FFFFFF"
         android:id="@+id/txtViewValueDeviceName"
         android:layout_alignBaseline="@+id/txtViewLabelDeviceName"
         android:layout_alignBottom="@+id/txtViewLabelDeviceName"

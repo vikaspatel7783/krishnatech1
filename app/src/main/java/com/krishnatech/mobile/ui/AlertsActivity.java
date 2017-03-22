@@ -1,8 +1,11 @@
 package com.krishnatech.mobile.ui;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -13,20 +16,31 @@ import com.krishnatech.mobile.http.VolleyHttpCommunicator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
-public class AlertsActivity extends ParentActivity implements VolleyHttpCommunicator.VolleyResultCallback {
+public class AlertsActivity extends ParentActivity implements VolleyHttpCommunicator.VolleyResultCallback, View.OnClickListener {
 
     private static final String PARAM_DEVICE_ID = "device_id";
     private static final String PARAM_DATE = "date";
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+    private TextView txtviewDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alerts);
 
-        showProgressbar("Fetching alerts for "+ServiceContext.getInstance().getDeviceId());
-        fetchAlerts();
+        TextView txtviewDeviceId = (TextView) findViewById(R.id.textView3);
+        txtviewDeviceId.setText(ServiceContext.getInstance().getDeviceId());
+
+        txtviewDate = (TextView) findViewById(R.id.textView5);
+        TextView txtViewSelectDate = (TextView) findViewById(R.id.txtViewSelectDate);
+        txtViewSelectDate.setOnClickListener(this);
+
+        findViewById(R.id.btnFetchAlerts).setOnClickListener(this);
     }
 
     private void fetchAlerts() {
@@ -36,7 +50,7 @@ public class AlertsActivity extends ParentActivity implements VolleyHttpCommunic
         JSONObject alertJsonBodyParams = new JSONObject();
         try {
             alertJsonBodyParams.put(PARAM_DEVICE_ID, ServiceContext.getInstance().getDeviceId());
-            alertJsonBodyParams.put(PARAM_DATE, "20/03/2017"); //FIXME: what format of date?
+            alertJsonBodyParams.put(PARAM_DATE, txtviewDate.getText()); //FIXME: what format of date?
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -60,12 +74,38 @@ public class AlertsActivity extends ParentActivity implements VolleyHttpCommunic
     public void onErrorResponse(int requestId, VolleyError error) {
         dismissProgressbar();
         AlertDialog alertDialog = UiUtil.getAlertDailog(this, "Alerts", "Error in fetching alerts:\nStatus code: " + error.networkResponse.statusCode);
-        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                finish();
-            }
-        });
         alertDialog.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.txtViewSelectDate:
+                // Get Current Date
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                txtviewDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+                break;
+
+            case R.id.btnFetchAlerts:
+                showProgressbar("Fetching alerts for "+ServiceContext.getInstance().getDeviceId());
+                fetchAlerts();
+                break;
+        }
+
     }
 }

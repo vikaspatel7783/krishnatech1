@@ -16,4 +16,7 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Alert -->
+    <string name="alert_select_date">Select date</string>
+
 </resources>
