@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#006080"
+    android:background="@color/button_color"
     android:choiceMode="singleChoice"
     android:dividerHeight="0.5dp"
     tools:context="com.krishnatech.mobile.ui.NavigationDrawerFragment" />

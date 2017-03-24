@@ -14,54 +14,24 @@ public class LogoutService extends VolleyHttpCommunicator {
 
     public static final int requestId = 1;
 
-    public LogoutService(Context context, int requestId, int method, String url, Map<String, String> bodyParams, Map<String, String> requestHeader, VolleyResultCallback volleyResultCallback, LogoutCallback logoutCallback) {
-        super(context, requestId, method, url, bodyParams, requestHeader, new CustomVollyCallback(logoutCallback));
+    public LogoutService(Context context, int requestId, int method, String url, Map<String, String> bodyParams, Map<String, String> requestHeader, VolleyResultCallback volleyResultCallback, final LogoutCallback logoutCallback) {
+        super(context, requestId, method, url, bodyParams, requestHeader, new VolleyResultCallback() {
+            @Override
+            public void onResponse(int requestId, JSONObject response) {
+                ServiceContext.getInstance().clear();
+                logoutCallback.onLoggedOut();
+            }
+
+            @Override
+            public void onErrorResponse(int requestId, VolleyError error) {
+                ServiceContext.getInstance().clear();
+                logoutCallback.onLoggedOut();
+            }
+        });
     }
 
     public void logout() {
         execute();
-    }
-
-    /*@Override
-    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-        try {
-            // TODO: Unfortunately, response received in plain text only as it is expected in JSON format.
-            String plainString = new String(response.data,
-                    HttpHeaderParser.parseCharset(response.headers));
-
-            // Manually wrapping to json string
-            try {
-                String jsonString = "{ \"status\": \""+plainString+"\" }";
-                return Response.success(new JSONObject(jsonString),
-                        HttpHeaderParser.parseCacheHeaders(response));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
-
-    private static class CustomVollyCallback implements VolleyResultCallback {
-
-        private final LogoutCallback logoutCallback;
-
-        public CustomVollyCallback(LogoutCallback logoutCallback) {
-            this.logoutCallback = logoutCallback;
-        }
-
-        @Override
-        public void onResponse(int requestId, JSONObject response) {
-            ServiceContext.getInstance().clear();
-            logoutCallback.onLoggedOut();
-        }
-
-        @Override
-        public void onErrorResponse(int requestId, VolleyError error) {
-            ServiceContext.getInstance().clear();
-            logoutCallback.onLoggedOut();
-        }
     }
 
     public interface LogoutCallback {
