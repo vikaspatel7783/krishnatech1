@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -84,15 +85,13 @@ public class DashboardActivity extends ParentActivity
                 .commit();*/
     }
 
-    public void onSectionAttached(int number) {
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // disable going back action when drawer icon pressed
+        return false;
     }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+    public void onSectionAttached(int number) {
     }
 
     @Override

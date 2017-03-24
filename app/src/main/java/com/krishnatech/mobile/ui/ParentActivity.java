@@ -1,10 +1,13 @@
 package com.krishnatech.mobile.ui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.krishnatech.mobile.R;
 
@@ -15,6 +18,15 @@ public class ParentActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            //actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_screen));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
+            actionBar.setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         playInAnimation();
     }
 
@@ -22,6 +34,16 @@ public class ParentActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         playOutAnimation();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     protected void showProgressbar(String message) {
