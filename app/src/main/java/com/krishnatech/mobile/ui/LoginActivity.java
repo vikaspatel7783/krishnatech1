@@ -1,7 +1,8 @@
 package com.krishnatech.mobile.ui;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,7 +27,7 @@ import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends Activity implements View.OnClickListener, VolleyHttpCommunicator.VolleyResultCallback {
+public class LoginActivity extends ParentActivity implements View.OnClickListener, VolleyHttpCommunicator.VolleyResultCallback {
 
     String url = UiUtil.BASE_URL + "/login";
 
@@ -42,6 +43,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        setupActionbar();
+        setupUI();
+    }
+
+    private void setupUI() {
         editTextUsername = (EditText) findViewById(R.id.edttxtUsername);
         editTextPassword = (EditText) findViewById(R.id.edtTextPassword);
         progressBar = (ProgressBar) findViewById(R.id.pgBarLogin);
@@ -51,6 +57,14 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
         btnLogin.setOnClickListener(this);
 
         showProgressBar(false, null);
+    }
+
+    private void setupActionbar() {
+        final ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
     }
 
     @Override

@@ -21,8 +21,7 @@ public class ParentActivity extends Activity {
 
         final ActionBar actionBar = getActionBar();
         if (actionBar != null) {
-            //actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_screen));
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar)));
             actionBar.setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
             actionBar.setDisplayHomeAsUpEnabled(true);
         }

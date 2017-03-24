@@ -21,7 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:singleLine="false"
         android:text="Please wait..."
-        android:textColor="#282828"/>
+        android:textColor="@color/actionbar"/>
 </LinearLayout>

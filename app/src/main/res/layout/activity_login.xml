@@ -69,14 +69,13 @@
 
     <Button
         android:text="LOGIN"
-        android:background="@android:color/holo_blue_dark"
+        style="@style/StyleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/btnLogin"
-        android:textColor="#FFFFFF"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -97,6 +96,7 @@
         android:layout_below="@+id/pgBarLogin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:textColor="@color/actionbar"
         android:id="@+id/txtviewProgressbar" />
 
 </RelativeLayout>
