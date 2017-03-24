@@ -8,9 +8,14 @@
     <string name="title_activity_alerts">Alerts</string>
 
     <!-- Drawer items -->
-    <string name="title_drawer_default">Default</string>
+    <string name="title_drawer_tankinfo">Tank info</string>
     <string name="title_drawer_alert">Alert</string>
+    <string name="title_drawer_set_password">Set password</string>
+    <string name="title_drawer_set_mobile">Set mobile</string>
+    <string name="title_drawer_get_graph">Graph</string>
+    <string name="title_drawer_set_offline_data">Set offline data</string>
     <string name="title_drawer_logout">Logout</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

@@ -87,8 +87,12 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
                 new String[]{
-                        getString(R.string.title_drawer_default),
+                        getString(R.string.title_drawer_tankinfo),
                         getString(R.string.title_drawer_alert),
+                        getString(R.string.title_drawer_set_password),
+                        getString(R.string.title_drawer_set_mobile),
+                        getString(R.string.title_drawer_get_graph),
+                        getString(R.string.title_drawer_set_offline_data),
                         getString(R.string.title_drawer_logout),
                 }));
         return mDrawerListView;

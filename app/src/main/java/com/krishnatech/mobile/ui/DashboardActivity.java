@@ -1,6 +1,5 @@
 package com.krishnatech.mobile.ui;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -28,11 +27,6 @@ public class DashboardActivity extends ParentActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +34,6 @@ public class DashboardActivity extends ParentActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -61,7 +54,13 @@ public class DashboardActivity extends ParentActivity
                 startActivity(new Intent(this, AlertsActivity.class));
                 break;
 
-            case 2: // Logout
+            case 2: // Set password
+            case 3: // Set mobile
+            case 4: // Get graph data
+            case 5: // Upload offline data
+                break;
+
+            case 6: // Logout
                 showProgressbar("Logging out...");
 
                 Map<String, String> header = new HashMap<>();
