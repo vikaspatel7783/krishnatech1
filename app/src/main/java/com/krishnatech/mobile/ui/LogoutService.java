@@ -2,24 +2,19 @@ package com.krishnatech.mobile.ui;
 
 import android.content.Context;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.krishnatech.mobile.ServiceContext;
 import com.krishnatech.mobile.http.VolleyHttpCommunicator;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 public class LogoutService extends VolleyHttpCommunicator {
 
     public static final int requestId = 1;
 
-    public LogoutService(Context context, int requestId, int method, String url, JSONObject bodyParams, Map<String, String> requestHeader, VolleyResultCallback volleyResultCallback, LogoutCallback logoutCallback) {
+    public LogoutService(Context context, int requestId, int method, String url, Map<String, String> bodyParams, Map<String, String> requestHeader, VolleyResultCallback volleyResultCallback, LogoutCallback logoutCallback) {
         super(context, requestId, method, url, bodyParams, requestHeader, new CustomVollyCallback(logoutCallback));
     }
 
@@ -27,7 +22,7 @@ public class LogoutService extends VolleyHttpCommunicator {
         execute();
     }
 
-    @Override
+    /*@Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
         try {
             // TODO: Unfortunately, response received in plain text only as it is expected in JSON format.
@@ -46,7 +41,7 @@ public class LogoutService extends VolleyHttpCommunicator {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     private static class CustomVollyCallback implements VolleyResultCallback {
 

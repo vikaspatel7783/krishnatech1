@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.ConnectException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends Activity implements View.OnClickListener, VolleyHttpCommunicator.VolleyResultCallback {
@@ -54,53 +55,25 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vol
 
     @Override
     public void onClick(View v) {
-
-        //communicate(url);
-
-        JSONObject loginJsonParams = getLoginJsonObject();
-        if (loginJsonParams == null) {
-            UiUtil.getAlertDailog(this, "Login", "Username or Password can not be blank").show();
-            return;
-        }
-
-        VolleyHttpCommunicator volleyHttpCommunicator = new VolleyHttpCommunicator(this,
-                loginRequestId, Request.Method.POST, url, loginJsonParams, null, this);
-        volleyHttpCommunicator.execute();
-
-        /*HashMap<String, String> headerParam = new HashMap<>();
-        headerParam.put(ServiceContext.KEY_AUTHORIZATION, "a2V0YW46a2V0YW4xMjM=");
-        VolleyHttpCommunicator volleyHttpCommunicator = new VolleyHttpCommunicator(
-                this,
-                Request.Method.GET,
-                UiUtil.BASE_URL + "/device/list",
-                null,
-                headerParam,
-                this);
-        volleyHttpCommunicator.execute();*/
-
-
-        showProgressBar(true, "Logging in progress...");
-
-        //new AsyncCommunicator(url).execute(loginJsonParams.toString());
-    }
-
-    private JSONObject getLoginJsonObject() {
-
         String userName = editTextUsername.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {
-            return null;
+            UiUtil.getAlertDailog(this, "Login", "Username or Password can not be blank").show();
+            return;
         }
 
-        JSONObject loginJsonParams = new JSONObject();
-        try {
-            loginJsonParams.put("username", userName);
-            loginJsonParams.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return loginJsonParams;
+        Map<String, String> loginParams = new HashMap<>();
+        loginParams.put("username", userName);
+        loginParams.put("password", password);
+
+        VolleyHttpCommunicator volleyHttpCommunicator = new VolleyHttpCommunicator(this,
+                loginRequestId, Request.Method.POST, url, loginParams, null, this);
+        volleyHttpCommunicator.execute();
+
+        showProgressBar(true, "Logging in progress...");
+
+        //new AsyncCommunicator(url).execute(loginJsonParams.toString());
     }
 
     private void showProgressBar(boolean show, String progressbarText) {

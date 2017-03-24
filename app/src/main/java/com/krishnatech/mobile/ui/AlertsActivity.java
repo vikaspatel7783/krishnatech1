@@ -13,7 +13,6 @@ import com.krishnatech.mobile.R;
 import com.krishnatech.mobile.ServiceContext;
 import com.krishnatech.mobile.http.VolleyHttpCommunicator;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
@@ -47,19 +46,16 @@ public class AlertsActivity extends ParentActivity implements VolleyHttpCommunic
         HashMap<String, String> header = new HashMap<>();
         header.put(ServiceContext.KEY_AUTHORIZATION, ServiceContext.getInstance().getToken());
 
-        JSONObject alertJsonBodyParams = new JSONObject();
-        try {
-            alertJsonBodyParams.put(PARAM_DEVICE_ID, ServiceContext.getInstance().getDeviceId());
-            alertJsonBodyParams.put(PARAM_DATE, txtviewDate.getText()); //FIXME: what format of date?
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        HashMap<String, String> bodyParams = new HashMap<>();
+        bodyParams.put(PARAM_DEVICE_ID, ServiceContext.getInstance().getDeviceId());
+        bodyParams.put(PARAM_DATE, txtviewDate.getText()+"-"+txtviewDate.getText());
 
-        new VolleyHttpCommunicator(this,
+        new VolleyHttpCommunicator(
+                this,
                 1,
                 Request.Method.GET,
                 UiUtil.BASE_URL + "/device/alerts",
-                alertJsonBodyParams,
+                bodyParams,
                 header,
                 this).execute();
     }
@@ -94,7 +90,7 @@ public class AlertsActivity extends ParentActivity implements VolleyHttpCommunic
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                                txtviewDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                txtviewDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
 
                             }
                         }, mYear, mMonth, mDay);
